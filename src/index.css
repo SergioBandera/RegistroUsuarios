@@ -1,0 +1,39 @@
+*{
+    margin-left: 0.2em;
+    padding: 0;
+}
+
+nav{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    
+}
+li{
+    display: flex;
+    list-style: none;
+    width: 15%;
+  
+}
+ul{
+    width: 100%;
+    display: flex;
+    gap: 10%;
+    
+    
+}
+a{
+    padding: 5%;
+    color:white;
+    text-decoration: none;
+}
+a:hover{
+    color:black;
+    background-color: white;
+    
+}
+
+p.header{
+   color:red;
+}
