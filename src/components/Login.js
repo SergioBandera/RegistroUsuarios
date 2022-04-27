@@ -1,13 +1,11 @@
-import React,{ useContext}  from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "./context/UserContext";
 
 export const Login = () => {
-  const context =useContext(UserContext);
-  
+  const context = useContext(UserContext);
 
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [pass, setPass] = useState(null);
 
@@ -24,24 +22,22 @@ export const Login = () => {
         username: user,
         password: pass,
       }),
-
-    })
-    try{
-      const datos =  await resp.json();
-      const {role} = datos;
+    });
+    try {
+      const datos = await resp.json();
+      const { role } = datos;
       context.setRole(role);
       context.setIsLoggedIn(true);
-      
-      sessionStorage.setItem( "datosUsuario", JSON.stringify(datos))
-    }catch(err){
-      console.log("el usuario no existe")
-    }
 
+      sessionStorage.setItem("datosUsuario", JSON.stringify(datos));
+    } catch (err) {
+      console.log("el usuario no existe");
+    }
   };
-  
-  const login = async () =>{
-    await llamada();
-  }
+
+  const login = () => {
+    llamada();
+  };
 
   return (
     <>
