@@ -1,6 +1,6 @@
 import React from 'react'
-import { Admin } from './Admin'
-import { Usuario } from './Usuario'
+import { Admin } from '../components/Admin'
+import { Usuario } from '../components/Usuario'
 
 export const UsuarioLogeado = () => {
   const localUser = JSON.parse(sessionStorage.getItem("datosUsuario"));

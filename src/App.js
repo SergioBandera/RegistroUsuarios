@@ -1,5 +1,5 @@
 import React from "react";
-import { UserProvider } from "./components/context/UserContext";
+import { UserProvider } from "./context/UserContext";
 import { Navegacion } from "./navigation/Navegacion";
 
 export const App = () => {

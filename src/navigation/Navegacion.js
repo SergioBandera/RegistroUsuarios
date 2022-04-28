@@ -3,7 +3,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import { PrivateRoute } from "./PrivateRoute";
 import { routes } from "./routes";
 import { Login } from "../components/Login";
-import UserContext from "../components/context/UserContext";
+import UserContext from "../context/UserContext";
 import { PublicRoute } from "./PublicRoute";
 
 export const Navegacion = () => {

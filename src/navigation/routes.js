@@ -1,6 +1,6 @@
 
-import { Registrar } from "../components/Registrar";
-import { UsuarioLogeado } from "../components/UsuarioLogeado";
+import { Registrar } from "../pages/Registrar";
+import { UsuarioLogeado } from "../pages/UsuarioLogeado";
 import { ROUTE_NAMES } from "../constants/constants";
 
 export const routes = [
