@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import UserContext from "./context/UserContext";
+import { useDispatch } from "react-redux";
+import UserContext from "../context/UserContext";
+import { LOGIN_REQUEST } from "../Redux/Types/types";
+ 
 
 export const Login = () => {
   const context = useContext(UserContext);
@@ -11,6 +14,10 @@ export const Login = () => {
   const cogerUser = (e) => setUser(e.target.value);
   const cogerPass = (e) => setPass(e.target.value);
 
+  //dispatch
+  const dispatch = useDispatch();
+  
+  //dispatch(LOGIN_REQUEST);
   const llamada = async () => {
     const resp = await fetch("http://localhost:8080/user/login", {
       method: "POST",
