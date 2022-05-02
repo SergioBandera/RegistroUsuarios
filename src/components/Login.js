@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import UserContext from "../context/UserContext";
-import { LOGIN_REQUEST } from "../Redux/Types/types";
+import { doLoginRequest, doLoginSucces, loginAction } from "../Redux/Actions/loginAction";
+import { LOGIN_REQUEST, LOGIN_SUCCES,  } from "../Redux/Types/types";
  
 
 export const Login = () => {
@@ -11,11 +12,14 @@ export const Login = () => {
   const [user, setUser] = useState(null);
   const [pass, setPass] = useState(null);
 
+
   const cogerUser = (e) => setUser(e.target.value);
   const cogerPass = (e) => setPass(e.target.value);
 
   //dispatch
   const dispatch = useDispatch();
+  // dispatch(loginAction(user, dispatch));
+ 
   
   //dispatch(LOGIN_REQUEST);
   const llamada = async () => {
@@ -66,7 +70,7 @@ export const Login = () => {
           onChange={cogerPass}
         ></input>
       </p>
-      <button onClick={login}>Login</button>
+      <button onClick={() =>dispatch(loginAction(user))}>Login</button>
       {/* </form> */}
     </>
   );
