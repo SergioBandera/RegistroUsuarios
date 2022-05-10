@@ -1,127 +1,172 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addProduct,
+  deleteProduct,
+  showAllProducts,
+  updateProduct,
+} from "../Redux/Actions/crudAction";
 
 export const Admin = () => {
-  const [datos, setDatos] = useState([]);
+  const [datos, setDatos] = useState(null);
   const [anadir, setAnadir] = useState(false);
-  const [nombreProducto, setNombreProducto] = useState(null);
-  const [stockProducto, setStockProducto] = useState(null);
-  const [priceProducto, setPriceProducto] = useState(null);
-  const [idProducto, setIdProducto] = useState(null);
-  const [descriptionProducto, setDescriptionProducto] = useState(null);
+  const [datosProducto, setDatosProducto] = useState({
+    idProducto: "",
+    nombreProducto: "",
+    stockProducto: "",
+    priceProducto: "",
+    descriptionProducto: "",
+  });
+
   const [editar, setEditar] = useState(false);
 
-  // const cogerId = (e) => setId(e.target.value);
-  const cogerName = (e) => setNombreProducto(e.target.value);
-  const cogerStock = (e) => setStockProducto(e.target.value);
-  const cogerPrice = (e) => setPriceProducto(e.target.value);
-  const cogerDescription = (e) => setDescriptionProducto(e.target.value);
+  const onChange = ({ target }) => {
+    const { value, name } = target;
+    setDatosProducto({
+      ...datosProducto,
+      [name]: value,
+    });
+  };
+  const dispatch = useDispatch();
+  const selectorDatos = useSelector((state) => state.crudReducer);
+  //inicio los datos
+  useEffect(() => {
+    dispatch(showAllProducts());
+  }, []);
 
   useEffect(() => {
-    peticion();
-  }, [idProducto]);
+    setDatos(selectorDatos.data);
+  }, [selectorDatos.data]);
 
   // botones
   const bProducto = () => {
     setAnadir(!anadir);
     nuevoProducto();
   };
-
-  const bEditarProducto = (id, name, stock, price, description) => {
-    setEditar(!editar);
-    editarProducto(id, name, stock, price, description);
-  };
-
+  //añadir producto
   const nuevoProducto = () => {
     if (anadir) {
       return (
         <div>
-          <input type="text" placeholder="name" onChange={cogerName} />
-          <input type="text" placeholder="stock" onChange={cogerStock} />
-          <input type="text" placeholder="price" onChange={cogerPrice} />
           <input
             type="text"
-            placeholder="description"
-            onChange={cogerDescription}
+            name="nombreProducto"
+            placeholder="name"
+            onChange={onChange}
+            value={datosProducto.nombreProducto}
           />
-          <button onClick={guardarProducto}>Guardar producto</button>
+          <input
+            type="text"
+            name="stockProducto"
+            placeholder="stock"
+            onChange={onChange}
+            value={datosProducto.stockProducto}
+          />
+          <input
+            type="text"
+            name="priceProducto"
+            placeholder="price"
+            onChange={onChange}
+            value={datosProducto.priceProducto}
+          />
+          <input
+            type="text"
+            name="descriptionProducto"
+            placeholder="description"
+            onChange={onChange}
+            value={datosProducto.descriptionProducto}
+          />
+          <button onClick={() => dispatch(addProduct(datosProducto))}>
+            Guardar producto
+          </button>
         </div>
       );
     }
   };
 
-  const borrarProducto = (id) => {
-    peticionBorrar(id);
-  };
   //editar producto
+  const bEditarProducto = (p) => {
+    setDatosProducto({
+      idProducto: p.id,
+      nombreProducto: p.name,
+      stockProducto: p.stock,
+      priceProducto: p.price,
+      descriptionProducto: p.description,
+    });
+    setEditar(!editar);
+  };
 
-  const editarProducto = (id, name, stock, price, description) => {
-   
-      if (id !== undefined) {
-        setIdProducto(id);
-        setNombreProducto(name);
-        setStockProducto(stock);
-        setPriceProducto(price);
-        setDescriptionProducto(description);
-        
-      }
-      if(editar){
-        return (
-          <div>
-        <p>Id del producto: {idProducto}</p>
-        <p>Nuevo nombre del producto:</p>
-        <input type="text" placeholder={nombreProducto} onChange={cogerName} />
-        <p>Nuevo stock: </p>
-        <input type="text" placeholder={stockProducto} onChange={cogerStock}/>
-        <p>Nuevo precio</p>
-        <input type="text" placeholder={priceProducto} onChange={cogerPrice}/>
-        <p>Nueva descripción</p>
-        <input type="text" placeholder={descriptionProducto} onChange={cogerDescription}/>
-        <button onClick={() => peticionEditar()}>Guardar producto</button>
-      </div>
-    );
+  const editarProducto = () => {
+    const {
+      idProducto,
+      nombreProducto,
+      stockProducto,
+      priceProducto,
+      descriptionProducto,
+    } = datosProducto;
+    if (editar) {
+      return (
+        <div>
+          <p>Id del producto:{idProducto}</p>
+          <p>Nuevo nombre del producto:</p>
+          <input
+            type="text"
+            name="nombreProducto"
+            placeholder={nombreProducto}
+            onChange={onChange}
+          />
+          <p>Nuevo stock: </p>
+          <input
+            type="text"
+            name="stockProducto"
+            placeholder={stockProducto}
+            onChange={onChange}
+          />
+          <p>Nuevo precio</p>
+          <input
+            type="text"
+            name="priceProducto"
+            placeholder={priceProducto}
+            onChange={onChange}
+          />
+          <p>Nueva descripción</p>
+          <input
+            type="text"
+            name="descriptionProducto"
+            placeholder={descriptionProducto}
+            onChange={onChange}
+          />
+          <button onClick={() => dispatch(updateProduct(datosProducto))}>Guardar producto</button>
+        </div>
+      );
     }
   };
-  //peticiones
-  const peticion = async () => {
-    const llamada = await fetch("http://localhost:8080/product/list");
-    const respuesta = await llamada.json();
-    setDatos(respuesta);
-  };
-  const guardarProducto = async () => {
-    const llamada = await fetch(
-      `http://localhost:8080/product/add?name=${nombreProducto}&stock=${stockProducto}&price=${priceProducto}&description=${descriptionProducto}`
-    );
-    console.log(llamada);
-  };
-  const peticionEditar = async () => {
-    await fetch(
-      `http://localhost:8080/product/modify?id=${idProducto}&name=${nombreProducto}&stock=${stockProducto}&price=${priceProducto}&description=${descriptionProducto}`
-    );
-    console.log("Producto editado");
-  };
-  const peticionBorrar = async (id) => {
-    await fetch(`http://localhost:8080/product/remove?id=${id}`);
-    console.log("Producto borrado");
-  };
+
   // mostrar lista productos
   const productos = () => {
-    return datos.map(({ id, name, stock, price, description }) => {
-      return (
-        <li key={id}>
-          <p>id: {id}</p>
-          <p>nombre:{name} </p>
-          <p>stock: {stock}</p>
-          <p>precio: {price}</p>
-          <p>descripción: {description}</p>
-          <button onClick={() => borrarProducto(id)}>Borrar</button>
-          <button
-            onClick={() => bEditarProducto(id, name, stock, price, description)}
-          >
-            Editar
-          </button>
-        </li>
-      );
-    });
+    if (datos != null) {
+      return datos.map(({ id, name, stock, price, description }) => {
+        return (
+          <li key={id}>
+            <p>id: {id}</p>
+            <p>nombre:{name} </p>
+            <p>stock: {stock}</p>
+            <p>precio: {price}</p>
+            <p>descripción: {description}</p>
+            <button onClick={() => dispatch(deleteProduct(id))}>Borrar</button>
+            <button
+              onClick={() => {
+                bEditarProducto({ id, name, stock, price, description });
+
+                // bEditarProducto(id, name, stock, price, description)
+              }}
+            >
+              Editar
+            </button>
+          </li>
+        );
+      });
+    }
   };
 
   return (
@@ -129,7 +174,7 @@ export const Admin = () => {
       <button onClick={bProducto}>Añadir nuevo producto</button>
       <div>{nuevoProducto()}</div>
       {editarProducto()}
-      <div>{productos()}</div>
+      {productos()}
     </>
   );
 };

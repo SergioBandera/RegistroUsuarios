@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserContext from "../context/UserContext";
-import { doLoginRequest, doLoginSucces, loginAction } from "../Redux/Actions/loginAction";
-import { LOGIN_REQUEST, LOGIN_SUCCES,  } from "../Redux/Types/types";
- 
+import { loginAction } from "../Redux/Actions/loginAction";
 
 export const Login = () => {
   const context = useContext(UserContext);
@@ -12,46 +10,26 @@ export const Login = () => {
   const [user, setUser] = useState(null);
   const [pass, setPass] = useState(null);
 
-
   const cogerUser = (e) => setUser(e.target.value);
   const cogerPass = (e) => setPass(e.target.value);
 
-  //dispatch
   const dispatch = useDispatch();
-  // dispatch(loginAction(user, dispatch));
- 
-  
-  //dispatch(LOGIN_REQUEST);
-  const llamada = async () => {
-    const resp = await fetch("http://localhost:8080/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-      body: new URLSearchParams({
-        username: user,
-        password: pass,
-      }),
-    });
-    try {
-      const datos = await resp.json();
-      const { role } = datos;
-      context.setRole(role);
-      context.setIsLoggedIn(true);
-
-      sessionStorage.setItem("datosUsuario", JSON.stringify(datos));
-    } catch (err) {
-      console.log("el usuario no existe");
-    }
-  };
+  const datosStorage = useSelector((state) => state.loginReducer);
 
   const login = () => {
-    llamada();
+    dispatch(loginAction(user, pass));
   };
+
+  useEffect(() => {
+    if (datosStorage.isLoggedIn === true) {
+      sessionStorage.setItem("datosUsuario", JSON.stringify(datosStorage));
+      context.setRole(datosStorage.role);
+      context.setIsLoggedIn(true);
+    }
+  });
 
   return (
     <>
-      {/* <form onSubmit={login}> */}
       <p>
         Usuario
         <input
@@ -70,8 +48,7 @@ export const Login = () => {
           onChange={cogerPass}
         ></input>
       </p>
-      <button onClick={() =>dispatch(loginAction(user))}>Login</button>
-      {/* </form> */}
+      <button onClick={login}>Login</button>
     </>
   );
 };

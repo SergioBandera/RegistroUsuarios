@@ -1,74 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  registerAction,
+} from "../Redux/Actions/registerAction";
 
 export const Registrar = () => {
-  const [usuario, setUsuario] = useState(null);
-  const [nombre, setNombre] = useState(null);
-  const [apellido, setApellido] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [password2, setPassword2] = useState(null);
-  const [datos, setDatos] = useState(null);
-  const [estado, setEstado] = useState(null);
+  //datos del registro
+  const [user, setUser] = useState({
+    username: "",
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    passwordRepeated: "",
+  });
 
-  useEffect(() => {
-    if (datos) {
-      llamada();
-    }
-  }, [datos]);
-
-  const cogerUsuario = (e) => setUsuario(e.target.value);
-  const cogerNombre = (e) => setNombre(e.target.value);
-  const cogerApellido = (e) => setApellido(e.target.value);
-  const cogerEmail = (e) => setEmail(e.target.value);
-  const cogerPassword = (e) => setPassword(e.target.value);
-  const cogerPassword2 = (e) => setPassword2(e.target.value);
-
-  const llamada = async () => {
-    if (password !== password2) {
-      console.log("las contraseñas no coinciden");
-    } else if (
-      usuario == null ||
-      nombre == null ||
-      apellido == null ||
-      email == null ||
-      password == null ||
-      password2 == null
-    ) {
-      console.log("los campos no pueden estar vacios");
-    } else {
-      try {
-        const peticion = await fetch("http://localhost:8080/user/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-          },
-          body: new URLSearchParams(datos),
-        });
-
-        setEstado(peticion.status);
-      } catch (err) {
-        console.log("error en el fetch");
-        setEstado(1);
-      }
-    }
-  };
-  const registrarse = () => {
-    setDatos({
-      username: usuario,
-      name: nombre,
-      surname: apellido,
-      email: email,
-      password: password,
-      passwordRepeated: password2,
+  //recibir parametros en los campos
+  const onChange = ({ target }) => {
+    const { value, name } = target;
+    setUser({
+      ...user,
+      [name]: value,
     });
   };
-  const estadoRegistro = () => {
-    if (estado != null) {
-      if (estado === 200) return <p>Usuario creado correctamente</p>;
-      else return <p>Error al crear el usuario</p>;
+  //redux
+  const dispatch = useDispatch();
+  const datosRegistro = useSelector((state) => state.registerReducer);
+
+  const formulario = () => {
+    if (
+      user.surname.length === 0 ||
+      user.name.length === 0 ||
+      user.email.length === 0 ||
+      user.password.length === 0 ||
+      user.username.length === 0
+    ) {
+      console.log("los campos no pueden estar vacios")
+      return
     }
+    if(user.password !== user.passwordRepeated){
+     console.log("las contraseñas no son iguales")
+     return
+    }
+    dispatch(registerAction(user));
   };
 
+  //dependiendo de el estado de la peticion de registro se pondra un texto u otro
+  const estadoRegistro = () => {
+    if (datosRegistro.hasRegistered) {
+      return <p>Usuario registrado correctamente</p>;
+    } else if (datosRegistro.error != null) {
+      return <p>Error al intentar registrarse, intentelo de nuevo</p>;
+    }
+  };
   return (
     <>
       <h2>Datos de usuario</h2>
@@ -79,51 +63,62 @@ export const Registrar = () => {
             type="text"
             name="username"
             placeholder=" nombre de usuario"
-            onChange={cogerUsuario}
+            onChange={onChange}
+            value={user.username}
           ></input>
         </p>
         <p>
           nombre
           <input
             type="text"
+            name="name"
             placeholder="su nombre"
-            onChange={cogerNombre}
+            onChange={onChange}
+            value={user.name}
           ></input>
         </p>
         <p>
           apellido
           <input
             type="text"
+            name="surname"
             placeholder="su apellido"
-            onChange={cogerApellido}
+            onChange={onChange}
+            value={user.surname}
           ></input>
         </p>
         <p>
           email
           <input
             type="text"
+            name="email"
             placeholder="ponga su email"
-            onChange={cogerEmail}
+            onChange={onChange}
+            value={user.email}
           ></input>
         </p>
         <p>
           contraseña
           <input
             type="password"
+            name="password"
             placeholder="una contraseña segura"
-            onChange={cogerPassword}
+            onChange={onChange}
+            value={user.password}
           ></input>
         </p>
         <p>
           repita contraseña
           <input
             type="password"
+            name="passwordRepeated"
             placeholder="repita su contraseña"
-            onChange={cogerPassword2}
+            onChange={onChange}
+            value={user.passwordRepeated}
           ></input>
         </p>
       </form>
-      <button onClick={registrarse}>Registrarse</button>
+      <button onClick={formulario}>Registrarse</button>
       {estadoRegistro()}
     </>
   );
