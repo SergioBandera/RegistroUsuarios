@@ -17,7 +17,7 @@ export const Login = () => {
   const datosStorage = useSelector((state) => state.loginReducer);
 
   const login = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     dispatch(loginAction(user, pass));
   };
 
@@ -27,31 +27,30 @@ export const Login = () => {
       context.setRole(datosStorage.role);
       context.setIsLoggedIn(true);
     }
-  });
+  },[]);
 
   return (
-    <>
     <form onSubmit={login}>
       <p>
         Usuario
         <input
-          type="text"
-          name="username"
-          placeholder="usuario"
+          type='text'
+          name='username'
+          placeholder='usuario'
           onChange={cogerUser}
+          data-testid='usernameInput'
         ></input>
       </p>
       <p>
         Contraseña
         <input
-          type="password"
-          name="password"
-          placeholder="contraseña"
+          type='password'
+          name='password'
+          placeholder='contraseña'
           onChange={cogerPass}
         ></input>
       </p>
-      <button type="submit">Login</button>
-      </form>
-    </>
+      <button  data-testid='submitBtn' type='submit'>Login</button>
+    </form>
   );
 };

@@ -1,63 +1,93 @@
+/* eslint-disable testing-library/no-unnecessary-act */
+/* eslint-disable testing-library/prefer-screen-queries */
 /* eslint-disable testing-library/render-result-naming-convention */
 /**
  * @jest-environment jsdom
  */
 import React from "react";
-import "@testing-library/jest-dom/extend-expect";
 import { Login } from "./Login";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, act } from "@testing-library/react";
 import { Provider } from "react-redux";
-import Store from "../Redux/Store";
+import { loginMock } from "../configs/mocks/apiResponses";
+import createMockStore from "redux-mock-store";
+import { PublicRoute } from "../navigation/PublicRoute";
+import { doLoginSucces } from "../Redux/Actions/loginAction";
+import thunk from "redux-thunk";
+const middlewares = [thunk];
 
+const mockStore = createMockStore(middlewares);
 
-beforeEach(() =>{
-    const login = render(<Provider store={Store}><Login/></Provider>)
-})
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  Navigate: () => <h1>Navigate</h1>,
+}));
 
-describe("Login test", () => {
-  test("renderizar boton login", () => {
-    // const login = render(
-    //   <Provider store={Store}>
-    //     <Login />
-    //   </Provider>
-    // );
-    const bLogin = screen.getByRole("button", { name: /login/i });
-    expect(bLogin).toBeInTheDocument();
+describe("Test in Login Component:", () => {
+  const store = mockStore({
+    loginReducer: {
+      user: null,
+      role: null,
+      error: null,
+      isLoading: false,
+      isLoggedIn: false,
+    },
   });
 
-  test("renderizar formulario", () => {
-    // const login = render(
-    //   <Provider store={Store}>
-    //     <Login />
-    //   </Provider>
-    // );
-    const tUsuario = screen.getByText(/usuario/i);
-    const tPassword = screen.getByText(/contraseña/i);
-    expect(tUsuario).toBeInTheDocument();
-    expect(tPassword).toBeInTheDocument();
+  test("Debería de renderizar correctamente", () => {
+    const { container } = render(
+      <Wrapper store={store}>
+        <Login />
+      </Wrapper>
+    );
+
+    expect(container).toBeInTheDocument();
   });
-  
-  test("hacer login", () => {
-    const bLogin = screen.getByRole("button", { name: /login/i });
-    const iUsuario = screen.getByPlaceholderText(/usuario/i);
-    const iPass = screen.getByPlaceholderText(/contraseña/i);
-    fireEvent.change(iUsuario, { target: { value: "user" } });
-    fireEvent.change(iPass, { target: { value: "1234" } });
-    expect(iUsuario).toHaveValue("user");
-    expect(iPass).toHaveValue("1234");
-    // const mockLogin = jest.fn();
-    // bLogin.onsubmit(mockLogin)
-    fireEvent.click(bLogin)
-    console.log(fireEvent.click(bLogin).valueOf())
-    // expect(mockLogin).toBeCalledTimes(1)1
-    
-    
-    
-    // const mockLogin = jest.fn();
-    // console.log(mockLogin)
-    
-    
+  test("Debería de mostrar el input correctamente", () => {
+    const { getByTestId } = render(
+      <Wrapper store={store}>
+        <Login />
+      </Wrapper>
+    );
 
+    expect(getByTestId("usernameInput")).toBeInTheDocument();
+  });
+  test("Deber cambiar el valor del input", () => {
+    const value = "test";
+    const { getByTestId } = render(
+      <Wrapper store={store}>
+        <Login />
+      </Wrapper>
+    );
 
+    const input = getByTestId("usernameInput");
+    fireEvent.change(input, { target: { value } });
+    expect(input.value).toBe(value);
+  });
+  test("Deber hacer el submit", async () => {
+    const response = await loginMock();
+    const { getByTestId } = render(
+      <Wrapper store={store}>
+        <Login />
+      </Wrapper>
+    );
+
+    await act(async () => {
+      const input = getByTestId("submitBtn");
+      fireEvent.click(input);
+    });
+
+    const actions = store.getActions();
+
+    expect(actions).toEqual(
+      expect.arrayContaining([expect.objectContaining(doLoginSucces(response))])
+    );
   });
 });
+
+const Wrapper = ({ children, store }) => {
+  return (
+    <Provider store={store}>
+      <PublicRoute>{children}</PublicRoute>
+    </Provider>
+  );
+};

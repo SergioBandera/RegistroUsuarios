@@ -1,18 +1,14 @@
 import { LOGIN_FAILED, LOGIN_REQUEST, LOGIN_SUCCES } from "../Types/types";
+import * as LoginService from "../../services/AuthService";
 
 export const loginAction = (user, pass) => async (dispatch) => {
   dispatch(doLoginRequest());
   try {
-    const resp = await fetch("http://localhost:8080/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-      body: new URLSearchParams({
-        username: user,
-        password: pass,
-      }),
-    });
+    const data = {
+      username: user,
+      password: pass,
+    };
+    const resp = await LoginService.login(data);
 
     const datos = await resp.json();
 
