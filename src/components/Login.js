@@ -16,7 +16,8 @@ export const Login = () => {
   const dispatch = useDispatch();
   const datosStorage = useSelector((state) => state.loginReducer);
 
-  const login = () => {
+  const login = (e) => {
+    e.preventDefault()
     dispatch(loginAction(user, pass));
   };
 
@@ -30,6 +31,7 @@ export const Login = () => {
 
   return (
     <>
+    <form onSubmit={login}>
       <p>
         Usuario
         <input
@@ -48,7 +50,8 @@ export const Login = () => {
           onChange={cogerPass}
         ></input>
       </p>
-      <button onClick={login}>Login</button>
+      <button type="submit">Login</button>
+      </form>
     </>
   );
 };
