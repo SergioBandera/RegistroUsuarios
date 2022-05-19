@@ -5,8 +5,8 @@ describe("Test in AuthService", () => {
   test("Debe hacer el login correctamente", async () => {
     const expected = await loginMock();
     const dataToTest = {
-      username: "Lewis",
-      password: "123456",
+      username: "user",
+      password: "1234",
     };
 
     const response = await AuthService.login(dataToTest);

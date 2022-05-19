@@ -1,5 +1,5 @@
 export const loginResponse = {
-  userName: "Lewis",
+  userName: "user",
 };
 
 export const loginFailed = {
@@ -10,10 +10,8 @@ export const loginFailed = {
 };
 
 export const loginMock = () => {
-  global.fetch = jest
-    .fn()
-    .mockImplementation(() => ({
-      json: () => loginResponse,
-    }));
+  global.fetch = jest.fn().mockImplementation(() => ({
+    json: () => loginResponse,
+  }));
   return loginResponse;
 };

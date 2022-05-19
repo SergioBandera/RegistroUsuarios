@@ -9,21 +9,21 @@ const initialState = {
   datosUsuario: null,
   error: null,
   hasRegistered: false,
-  isLoadingRegister: false
+  isLoadingRegister: false,
 };
 const registerReducer = (state = initialState, action) => {
   switch (action.type) {
     case REGISTER_REQUEST:
       return {
         ...state,
-        isLoadingRegister: true
+        isLoadingRegister: true,
       };
     case REGISTER_SUCCES:
       return {
         ...state,
-        datosUsuario:action.payload,
+        datosUsuario: action.payload,
         hasRegistered: true,
-        isLoadingRegister: false
+        isLoadingRegister: false,
       };
 
     case REGISTER_FAILED:

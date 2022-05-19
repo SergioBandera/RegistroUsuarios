@@ -4,11 +4,7 @@ import * as LoginService from "../../services/AuthService";
 export const loginAction = (user, pass) => async (dispatch) => {
   dispatch(doLoginRequest());
   try {
-    const data = {
-      username: user,
-      password: pass,
-    };
-    const resp = await LoginService.login(data);
+    const resp = await LoginService.login(user, pass);
 
     const datos = await resp.json();
 

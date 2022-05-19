@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserContext from "../context/UserContext";
 import { loginAction } from "../Redux/Actions/loginAction";
 
+
 export const Login = () => {
   const context = useContext(UserContext);
 
@@ -27,7 +28,7 @@ export const Login = () => {
       context.setRole(datosStorage.role);
       context.setIsLoggedIn(true);
     }
-  },[]);
+  },[login]);
 
   return (
     <form onSubmit={login}>
@@ -38,7 +39,6 @@ export const Login = () => {
           name='username'
           placeholder='usuario'
           onChange={cogerUser}
-          data-testid='usernameInput'
         ></input>
       </p>
       <p>
@@ -50,7 +50,7 @@ export const Login = () => {
           onChange={cogerPass}
         ></input>
       </p>
-      <button  data-testid='submitBtn' type='submit'>Login</button>
+      <button type='submit'>Login</button>
     </form>
   );
 };
