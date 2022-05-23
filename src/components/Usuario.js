@@ -5,6 +5,7 @@ import {
   showByNameProducts,
   showStockProducts,
 } from "../Redux/Actions/crudAction";
+import "./usuarioLogeado.css";
 
 export const Usuario = () => {
   const [datos, setDatos] = useState(null);
@@ -15,8 +16,8 @@ export const Usuario = () => {
   const selectorDatos = useSelector((state) => state.crudReducer);
   //cuando cambien los datos en el store.data, cambiaremos el state datos
   useEffect(() => {
-    setDatos(selectorDatos.data)
-  },[selectorDatos.data]);
+    setDatos(selectorDatos.data);
+  }, [selectorDatos.data]);
 
   //pulsar el boton para mostrar todo y ocultar el resto
   const botonTodo = () => {
@@ -36,33 +37,37 @@ export const Usuario = () => {
   //pintar productos buscados por nombre
   const productosBuscados = () => {
     //si busqueda tiene datos y mostrar busqueda ha recibido fetch
-    if (selectorDatos.showByName ===true) {
+    if (selectorDatos.showByName === true) {
       return datos.map(({ id, name, stock, price, description }) => {
         return (
-          <li key={id}>
-            <p>id: {id}</p>
-            <p>nombre:{name} </p>
-            <p>stock: {stock}</p>
-            <p>precio: {price}</p>
-            <p>descripción: {description}</p>
+          <li key={id} className="lista-productos">
+            <p className="p-productos">id: {id}</p>
+            <div className="div-producto">
+              <p className="p-div-usuario">nombre: {name} </p>
+              <p className="p-div-usuario">stock: {stock}</p>
+              <p className="p-div-usuario">precio: {price}</p>
+            </div>
+            <p className="p-productos">descripción: {description}</p>
           </li>
         );
       });
     }
   };
-  //pintar todos los productos 
+  //pintar todos los productos
   const todosProductos = () => {
     //si los datos no estan vacios mapeamos
     if (selectorDatos.showAll === true) {
       return datos.map(({ id, name, stock, price, description }) => {
         //si queremos mostrar todo
         return (
-          <li key={id}>
-            <p>id: {id}</p>
-            <p>nombre:{name} </p>
-            <p>stock: {stock}</p>
-            <p>precio: {price}</p>
-            <p>descripción: {description}</p>
+          <li key={id} className="lista-productos">
+            <p className="p-productos">id: {id}</p>
+            <div className="div-producto">
+              <p className="p-div-usuario">nombre: {name} </p>
+              <p className="p-div-usuario">stock: {stock}</p>
+              <p className="p-div-usuario">precio: {price}</p>
+            </div>
+            <p className="p-productos">descripción: {description}</p>
           </li>
         );
       });
@@ -74,33 +79,44 @@ export const Usuario = () => {
       return datos.map(({ id, name, stock, price, description }) => {
         if (stock > 0)
           return (
-            <li key={id}>
-              <p>id: {id}</p>
-              <p>nombre:{name} </p>
-              <p>stock: {stock}</p>
-              <p>precio: {price}</p>
-              <p>descripción: {description}</p>
+            <li key={id} className="lista-productos">
+              <p className="p-productos">id: {id}</p>
+              <div className="div-producto">
+                <p className="p-div-usuario">nombre: {name} </p>
+                <p className="p-div-usuario">stock: {stock}</p>
+                <p className="p-div-usuario">precio: {price}</p>
+              </div>
+              <p className="p-productos">descripción: {description}</p>
             </li>
           );
       });
     }
   };
   return (
-    <>
-      <div className="container">
+    <div className="container">
+      <div className="productos-usuario">
+        <button onClick={botonTodo} className="button-usuario">
+          Mostrar todos los productos
+        </button>
+        <button onClick={botonDisponibles} className="button-usuario">
+          Mostrar solo disponibles
+        </button>
+      </div>
+      <div className="buscar">
         <input
+          className="input-usuario"
           type="text"
           placeholder="Buscar por nombre"
           onClick={productosBuscados}
           onChange={cogerBusqueda}
         />
-        <button onClick={botonBusqueda}>Buscar</button>
-        <button onClick={botonTodo}>Mostrar todos los productos</button>
-        <button onClick={botonDisponibles}>Mostrar solo disponibles</button>
-        {todosProductos()}
-        {stockProductos()}
-        {productosBuscados()}
+        <button onClick={botonBusqueda} className="button-usuario">
+          Buscar
+        </button>
       </div>
-    </>
+      {todosProductos()}
+      {stockProductos()}
+      {productosBuscados()}
+    </div>
   );
 };

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserContext from "../context/UserContext";
 import { loginAction } from "../Redux/Actions/loginAction";
-
+import "./login.css";
 
 export const Login = () => {
   const context = useContext(UserContext);
@@ -28,29 +28,33 @@ export const Login = () => {
       context.setRole(datosStorage.role);
       context.setIsLoggedIn(true);
     }
-  },[login]);
+  }, [login]);
 
   return (
-    <form onSubmit={login}>
-      <p>
-        Usuario
+    <form onSubmit={login} className="form-login">
+      <div className="usuario">
+        <p className="login">Usuario</p>
         <input
-          type='text'
-          name='username'
-          placeholder='usuario'
+          className="inputa-login"
+          type="text"
+          name="username"
+          placeholder="usuario"
           onChange={cogerUser}
         ></input>
-      </p>
-      <p>
-        Contraseña
+      </div>
+      <div className="contra">
+        <p className="login">Contraseña</p>
         <input
-          type='password'
-          name='password'
-          placeholder='contraseña'
+          className="inputa-login"
+          type="password"
+          name="password"
+          placeholder="contraseña"
           onChange={cogerPass}
         ></input>
-      </p>
-      <button type='submit'>Login</button>
+      </div>
+      <button type="submit" className="button-login">
+        Login
+      </button>
     </form>
   );
 };

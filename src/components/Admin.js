@@ -6,6 +6,7 @@ import {
   showAllProducts,
   updateProduct,
 } from "../Redux/Actions/crudAction";
+import "./usuarioLogeado.css";
 
 export const Admin = () => {
   const [datos, setDatos] = useState(null);
@@ -28,15 +29,15 @@ export const Admin = () => {
     });
   };
   const dispatch = useDispatch();
-  const selectorDatos = useSelector((state) => state.crudReducer);
+  const recogerDatos = useSelector((state) => state.crudReducer);
   //inicio los datos
   useEffect(() => {
     dispatch(showAllProducts());
   }, []);
 
   useEffect(() => {
-    setDatos(selectorDatos.data);
-  }, [selectorDatos.data]);
+    setDatos(recogerDatos.data);
+  }, [recogerDatos.data]);
 
   // botones
   const bProducto = () => {
@@ -47,8 +48,9 @@ export const Admin = () => {
   const nuevoProducto = () => {
     if (anadir) {
       return (
-        <div>
+        <div className="nuevo-producto">
           <input
+            className="nNProducto"
             type="text"
             name="nombreProducto"
             placeholder="name"
@@ -136,7 +138,9 @@ export const Admin = () => {
             placeholder={descriptionProducto}
             onChange={onChange}
           />
-          <button onClick={() => dispatch(updateProduct(datosProducto))}>Guardar producto</button>
+          <button onClick={() => dispatch(updateProduct(datosProducto))}>
+            Guardar producto
+          </button>
         </div>
       );
     }
@@ -147,22 +151,32 @@ export const Admin = () => {
     if (datos != null) {
       return datos.map(({ id, name, stock, price, description }) => {
         return (
-          <li key={id}>
-            <p>id: {id}</p>
-            <p>nombre:{name} </p>
-            <p>stock: {stock}</p>
-            <p>precio: {price}</p>
-            <p>descripción: {description}</p>
-            <button onClick={() => dispatch(deleteProduct(id))}>Borrar</button>
-            <button
-              onClick={() => {
-                bEditarProducto({ id, name, stock, price, description });
+          <li key={id} className="lista-productos">
+            <p className="p-productos">id: {id}</p>
+            <div className="div-producto">
+              <p className="p-div-usuario">nombre: {name} </p>
+              <p className="p-div-usuario">stock: {stock}</p>
+              <p className="p-div-usuario">precio: {price}</p>
+            </div>
+            <p className="p-productos">descripción: {description}</p>
+            <div className="acciones-producto">
+              <button
+                className="button-borrar"
+                onClick={() => dispatch(deleteProduct(id))}
+              >
+                Borrar
+              </button>
+              <button
+                className="button-editar"
+                onClick={() => {
+                  bEditarProducto({ id, name, stock, price, description });
 
-                // bEditarProducto(id, name, stock, price, description)
-              }}
-            >
-              Editar
-            </button>
+                  // bEditarProducto(id, name, stock, price, description)
+                }}
+              >
+                Editar
+              </button>
+            </div>
           </li>
         );
       });
@@ -171,7 +185,11 @@ export const Admin = () => {
 
   return (
     <>
-      <button onClick={bProducto}>Añadir nuevo producto</button>
+      <div className="div-new">
+        <button className="button-new" onClick={bProducto}>
+          Añadir nuevo producto
+        </button>
+      </div>
       <div>{nuevoProducto()}</div>
       {editarProducto()}
       {productos()}

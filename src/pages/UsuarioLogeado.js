@@ -19,8 +19,10 @@ export const UsuarioLogeado = () => {
 
   return (
     <>
-    <h2>Bienvenido {localUser.username}</h2>   
+    <h2>Bienvenido {localUser.username}</h2>
+    <div className='container'>
     {mostrar()}
+    </div>   
     </>
   )
 }

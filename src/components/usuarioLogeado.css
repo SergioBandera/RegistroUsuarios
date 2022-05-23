@@ -1,0 +1,73 @@
+h2, .container{
+    margin-left: 8px;
+}
+.container , .buscar, .productos-usuario{
+    display: flex;
+}
+.container{
+    width: 35em;
+    flex-direction: column;
+}
+.buscar{
+    justify-content: center;
+    gap: 1em;
+    height: 2em;
+    margin-bottom: 2em;
+}
+.productos-usuario{
+    gap: 4em;
+    justify-content: center;
+    margin-bottom: 2em;
+    height: 3em;
+}
+.lista-productos{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 1em;
+    border-style: double ;
+
+}
+
+.p-productos{
+    display: flex;
+    justify-content: center;
+    margin: 0px;
+}
+.div-producto{
+    display: flex;
+    justify-content: center;
+}
+.p-div-usuario{
+    display: flex;
+    justify-content: center;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+/* administrador */
+.acciones-producto{
+    display: flex;
+    justify-content: center;
+    margin-top: 1em;
+    gap: 1em;
+}
+
+.button-borrar, .button-editar{
+    height: 4em;
+}
+.div-new{
+    display: flex;
+    justify-content: center;
+
+}
+.button-new{
+    display: flex;
+    align-items: center;
+    height: 4em;
+    margin-bottom: 1em;
+}
+
+
+
+
+

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  registerAction,
-} from "../Redux/Actions/registerAction";
+import { registerAction } from "../Redux/Actions/registerAction";
+import "./registrar.css";
 
 export const Registrar = () => {
   //datos del registro
@@ -27,7 +26,8 @@ export const Registrar = () => {
   const dispatch = useDispatch();
   const datosRegistro = useSelector((state) => state.registerReducer);
 
-  const formulario = () => {
+  const formulario = (e) => {
+    e.preventDefault();
     if (
       user.surname.length === 0 ||
       user.name.length === 0 ||
@@ -35,12 +35,12 @@ export const Registrar = () => {
       user.password.length === 0 ||
       user.username.length === 0
     ) {
-      console.log("los campos no pueden estar vacios")
-      return
+      console.log("los campos no pueden estar vacios");
+      return;
     }
-    if(user.password !== user.passwordRepeated){
-     console.log("las contraseñas no son iguales")
-     return
+    if (user.password !== user.passwordRepeated) {
+      console.log("las contraseñas no son iguales");
+      return;
     }
     dispatch(registerAction(user));
   };
@@ -55,71 +55,81 @@ export const Registrar = () => {
   };
   return (
     <>
-      <h2>Datos de usuario</h2>
-      <form>
-        <p>
-          usuario
+      <h2 className="h2-register">Datos de usuario</h2>
+      <form className="form-register">
+        <div className="div-register">
+          <p className="p-register">usuario</p>
           <input
+            className="input-register"
             type="text"
             name="username"
             placeholder=" nombre de usuario"
             onChange={onChange}
             value={user.username}
           ></input>
-        </p>
-        <p>
-          nombre
+        </div>
+        <div className="div-register">
+          <p className="p-register">nombre</p>
           <input
+            className="input-register"
             type="text"
             name="name"
             placeholder="su nombre"
             onChange={onChange}
             value={user.name}
           ></input>
-        </p>
-        <p>
-          apellido
+        </div>
+        <div className="div-register">
+          <p className="p-register">apellido</p>
           <input
+            className="input-register"
             type="text"
             name="surname"
             placeholder="su apellido"
             onChange={onChange}
             value={user.surname}
           ></input>
-        </p>
-        <p>
-          email
+        </div>
+        <div className="div-register">
+          <p className="p-register">email</p>
           <input
+            className="input-register"
             type="text"
             name="email"
             placeholder="ponga su email"
             onChange={onChange}
             value={user.email}
           ></input>
-        </p>
-        <p>
-          contraseña
-          <input
-            type="password"
-            name="password"
-            placeholder="una contraseña segura"
-            onChange={onChange}
-            value={user.password}
+        </div>
+        <div className="div-register">
+
+        <p className="p-register">contraseña</p>
+        <input
+          className="input-register"
+          type="password"
+          name="password"
+          placeholder="una contraseña segura"
+          onChange={onChange}
+          value={user.password}
           ></input>
-        </p>
-        <p>
-          repita contraseña
-          <input
-            type="password"
-            name="passwordRepeated"
-            placeholder="repita su contraseña"
-            onChange={onChange}
-            value={user.passwordRepeated}
+          </div>
+          <div className="div-register">
+
+        <p className="p-register">repita contraseña</p>
+        <input
+          className="input-register"
+          type="password"
+          name="passwordRepeated"
+          placeholder="repita su contraseña"
+          onChange={onChange}
+          value={user.passwordRepeated}
           ></input>
-        </p>
+          </div>
+        <button onClick={formulario} className="button-register">
+          Registrarse
+        </button>
+        {estadoRegistro()}
       </form>
-      <button onClick={formulario}>Registrarse</button>
-      {estadoRegistro()}
     </>
   );
 };

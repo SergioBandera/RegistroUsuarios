@@ -12,7 +12,7 @@ export const Navegacion = () => {
   return (
     <>
       <header>
-        <nav>
+        <nav >
           <ul>
             {routes.map(({ path, name }) => (
               <li key={path}>

@@ -1,0 +1,34 @@
+
+.form-login{
+    display: flex;
+    flex-direction: column;
+    margin: 1%;  
+    padding: 1%;
+    width: 1;
+}
+.login{
+    display: flex;
+    width: 5em;
+}
+.input-login{
+    display: flex;
+    margin-left: 1em;
+    width: 10em;
+    height: 2em;
+}
+.button-login{
+    display: flex;
+    justify-content: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 8em;
+    height: 3em;
+}
+.usuario, .contra{
+    display: flex;
+    margin-bottom:2em;
+    align-items: center;
+}
+
